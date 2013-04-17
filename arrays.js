@@ -70,9 +70,9 @@ Array.prototype.inject = function(start, f) {
 	return start;
 };
 
-console.log([2,5,6].inject(0, function(num1, num2) {
-	return num1 + num2;
-}))
+// console.log([2,5,6].inject(0, function(num1, num2) {
+// 	return num1 + num2;
+// }))
 
 //bubble_sort, substrings
 
@@ -213,6 +213,38 @@ function makeChange(coins, amount) {
 		return result;
 	}
 }
+
+
+function makeChangeForWeirdos(coins, amount) {
+	var bestSoFar, result, bigCoin, newAmount, numOfBigCoin, dupCoins;
+
+		if (coins.length === 1) {
+			var array = [];
+			_.times(amount / coins[0], function(){
+				array.push(coins[0]);
+			});
+			return array;
+		} else if (!coins.length) {
+			return [];
+		} else {
+			for(var i = 0; i < coins.length; i++){
+				dupCoins = coins.slice(0);
+				bigCoin = coins[i];
+				newAmount = amount % bigCoin;
+				numOfBigCoin = Math.floor(amount / bigCoin);
+				result = makeChangeForWeirdos(dupCoins.slice(i+1), newAmount);
+				_.times(numOfBigCoin, function() {
+					result.unshift(bigCoin);
+				});
+				if (bestSoFar == null || result.length < bestSoFar.length ) {
+					bestSoFar = result;
+				}
+			}
+		}
+	return bestSoFar;
+}
+
+console.log(makeChangeForWeirdos([10, 7, 1], 14));
 
 function mergeSort(array) {
 	if (array.length === 1) {
